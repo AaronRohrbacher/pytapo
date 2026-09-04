@@ -509,11 +509,18 @@ class HttpMediaSession:
                 if resp.encrypted and isinstance(resp.plaintext, Exception):
                     raise resp.plaintext
 
-                tsReader.setBuffer(list(resp.plaintext))
-                pkt = tsReader.getPacket()
-                if pkt and pkt.payloadType in (PayloadType.PCMA, PayloadType.PCMU):
-                    resp.audioPayload = pkt.payload
-                    resp.audioPayloadType = pkt.payloadType
+                # Only MPEG-TS parts can contain the private RTP audio
+                # payload. JSON and native JPEG responses are not transport
+                # streams and must not be fed to TSReader.
+                if resp.mimetype == "video/mp2t":
+                    tsReader.setBuffer(list(resp.plaintext))
+                    pkt = tsReader.getPacket()
+                    if pkt and pkt.payloadType in (
+                        PayloadType.PCMA,
+                        PayloadType.PCMU,
+                    ):
+                        resp.audioPayload = pkt.payload
+                        resp.audioPayloadType = pkt.payloadType
 
                 yield resp
 

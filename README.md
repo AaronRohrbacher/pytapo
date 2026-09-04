@@ -1,5 +1,19 @@
 # PyTapo
 
+> This is the companion fork used by **Tapo Enhance**. It preserves the
+> original project's history, license, and authorship. The focused additions
+> are native event-JPEG retrieval, bounded recording streaming, live-preview
+> streaming, and media-type-safe session parsing. See
+> [UPSTREAM.md](UPSTREAM.md) for the exact base commit and change summary.
+>
+> PyTapo was created by [Juraj Nyíri](https://github.com/JurajNyiri) and its
+> contributors. Their reverse-engineering and continued open-source work are
+> the foundation of this fork.
+>
+> Upstream `pytapo` remains available under its MIT [`LICENSE`](LICENSE). The
+> Tapo Enhance-specific additions are GPL-2.0-only; see
+> [`LICENSE-GPL-2.0`](LICENSE-GPL-2.0) and [`UPSTREAM.md`](UPSTREAM.md).
+
 Python library for communication with Tapo Cameras.
 
 Used inside Home Assistant Integration [HomeAssistant-Tapo-Control](https://github.com/JurajNyiri/HomeAssistant-Tapo-Control).
@@ -9,11 +23,15 @@ Used inside Home Assistant Integration [HomeAssistant-Tapo-Control](https://gith
 - Python3.13
 - PIP modules installed
 
-## Install:
+## Install
 
+Install this fork after it has been published:
+
+```bash
+python3 -m pip install "pytapo @ git+https://github.com/AaronRohrbacher/pytapo.git@tapo-enhance"
 ```
-python3 -m pip install pytapo
-```
+
+`python3 -m pip install pytapo` installs Juraj's upstream release instead.
 
 ## Usage examples:
 

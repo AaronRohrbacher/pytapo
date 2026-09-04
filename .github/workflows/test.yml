@@ -1,0 +1,38 @@
+name: Test fork
+
+on:
+  push:
+    branches: [main, tapo-enhance]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+      - run: python -m pip install --upgrade pip build
+      - run: python -m pip install -e ".[test]"
+      - run: python -m pytest -q test_media_helpers.py
+      - run: python -m build
+      - name: Verify wheel contains fork modules
+        run: |
+          python - <<'PY'
+          import glob, zipfile
+          wheel = glob.glob("dist/*.whl")[0]
+          required = {
+              "pytapo/media_stream/preview_stream.py",
+              "pytapo/media_stream/recording_stream.py",
+              "pytapo/media_stream/recording_thumbnail.py",
+          }
+          with zipfile.ZipFile(wheel) as archive:
+              missing = required.difference(archive.namelist())
+          if missing:
+              raise SystemExit(f"wheel missing: {sorted(missing)}")
+          PY
